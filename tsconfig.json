@@ -18,9 +18,10 @@
   ],
   "files": [
     "./typings/index.d.ts",
-    "./src/app.ts"
+    "./src/**/*.ts"
   ],
   "atom": {
-    "rewriteTsconfig": false
+    "rewriteTsconfig": false,
+    "formatOnSave": true
   }
 }
