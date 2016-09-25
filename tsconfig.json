@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "removeComments": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "noImplicitAny": false,
+    "outDir": "./build"
+  },
+  "filesGlob": [
+    "./src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "src/lib/customTypings"
+  ],
+  "files": [
+    "./typings/index.d.ts",
+    "./src/app.ts"
+  ],
+  "atom": {
+    "rewriteTsconfig": false
+  }
+}
