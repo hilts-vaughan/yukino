@@ -19,7 +19,6 @@
   "files": [
   ],
   "atom": {
-    "rewriteTsconfig": false,
-    "formatOnSave": true
+    "rewriteTsconfig": false
   }
 }
