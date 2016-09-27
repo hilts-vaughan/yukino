@@ -3,6 +3,7 @@ import {YoutubeSearchProvider} from "../services/search/YoutubeSearchProvider";
 import {MusicSearchService} from "../services/MusicSearchService";
 import {IAPIController} from "../IAPIController";
 import * as restify from 'restify'
+import * as config from 'config'
 
 /**
  * This is a service that allows you to search for various music services
@@ -13,7 +14,8 @@ export class MusicSearchController implements IAPIController {
 
   constructor() {
     this._searchService = new MusicSearchService()
-    this._searchService.registerProvider(new YoutubeSearchProvider('AIzaSyB-hn6btafEpxn9e74C9Djkv7fzLwzpYh4'))
+    const apiKey: string = config.get<string>('youtube.key');
+    this._searchService.registerProvider(new YoutubeSearchProvider(apiKey))
   }
 
   registerWithServer(server: restify.Server) {

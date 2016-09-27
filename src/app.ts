@@ -16,7 +16,7 @@ class Application {
   private _routes: Array<any> = [];
 
   constructor() {
-    console.log('Pricing server is starting up...');
+    console.log('yukino - core is booting...');
 
     // Initialize the RESTify Express server...
     this.server = restify.createServer();
@@ -55,9 +55,7 @@ class Application {
         let pathToRegister = "./controllers/" + file
         let c = require(pathToRegister);
         for (const key in c) {
-          console.log(key)
           let route: IAPIController = new c[key]()
-          console.log(route)
           route.registerWithServer(this.server)
         }
       }

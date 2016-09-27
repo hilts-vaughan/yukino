@@ -1,3 +1,4 @@
+import {SongSearchResult} from "./search/SongSearchResult";
 import * as _ from 'lodash'
 
 export class MusicSearchService {
