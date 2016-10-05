@@ -11,7 +11,7 @@ export class DownloadService {
     const newPath = path.join('/tmp', key)
 
     return new Promise<DownloadReceipt>((resolve, reject) => {
-      youtubedl.exec(url, ['-x', '--audio-format', 'mp3', '-o', newPath + ".%(ext)s"], {}, function(err, output) {
+      youtubedl.exec(url, ['-f', 'bestaudio', '-o', newPath + ".mp3"], {}, function(err, output) {
         if (err) {
           reject(err)
         } else {
