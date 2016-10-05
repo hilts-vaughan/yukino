@@ -24,6 +24,8 @@ export class SongFetchJobHandler {
   handleRequest(data: any): Promise<SongRequest> {
     let resourcePath: string = null;
 
+    console.log('Now handling a song request job...')
+
     return new Promise<SongRequest>((resolve, reject) => {
       const url = data.url;
       this._downloadService.downloadVideoAudioToDisk(url).then((download: DownloadReceipt) => {

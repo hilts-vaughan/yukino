@@ -8,7 +8,7 @@ export class SongFetchJob implements IJob {
     this._deliverTo = token;
   }
 
-  static getJobKey(): string {
+  getJobKey(): string {
     return 'SongFetchJob';
   }
 

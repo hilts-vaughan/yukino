@@ -76,11 +76,6 @@ class Application {
 
 }
 
-var computeQueue = kue.createQueue();
-
-computeQueue.on('error', (error) => {
-  console.log(error);
-})
 
 // Begin the master server if it's master
 if (cluster.isMaster) {
@@ -92,13 +87,5 @@ if (cluster.isMaster) {
   for (let i = 0; i < os.cpus().length; i++) {
     cluster.fork();
   }
-
-  const job = computeQueue.create('download', { url: 'https://www.youtube.com/watch?v=RITep593A2U' }).save()
-  job.once('complete', (result: any) => {
-    console.log(JSON.stringify(result))
-  })
-
 } else {
-  const worker = new ComputeWorker(1, 1, computeQueue);
-  worker.listen();
 }

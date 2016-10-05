@@ -1,5 +1,5 @@
 export abstract class IJob {
-  static getJobKey(): string {
+  getJobKey(): string {
     throw new Error('Please implement me.')
   }
 

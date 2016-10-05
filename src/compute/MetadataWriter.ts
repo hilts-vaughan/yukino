@@ -12,21 +12,24 @@ export class MetadataWriter {
     return new Promise<SongMetadata>((resolve, reject) => {
       return resolve(metadata);
 
-      const fileHandler = new id3.File(file);
-      var meta = new id3.Meta({
-        artist: metadata.artist,
-        title: metadata.title,
-        album: metadata.album
-      });
 
-      this._writer.setFile(fileHandler).write(meta, (err) => {
-        console.log(err)
-        if (err) {
-          throw err;
-        } else {
-          resolve(metadata);
-        }
-      });
+      // TODO: Find a way to make this resolver work
+      // 
+      // let fileHandler = new id3.File(file);
+      // var meta = new id3.Meta({
+      //   artist: metadata.artist,
+      //   title: metadata.title,
+      //   album: metadata.album
+      // });
+      //
+      // this._writer.setFile(fileHandler).write(meta, (err) => {
+      //   console.log(err)
+      //   if (err) {
+      //     throw err;
+      //   } else {
+      //     resolve(metadata);
+      //   }
+      // });
     })
   }
 }

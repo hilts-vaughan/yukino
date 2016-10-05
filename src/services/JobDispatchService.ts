@@ -19,11 +19,18 @@ export class JobDispatchService {
 
   addJobHandler(jobKey: string, handler: IJobHandler) {
     this._registry.registerHandlerForJobType(jobKey, handler);
+    this._queue.process(jobKey, 5, (job: kue.Job, done: Function) => {
+      handler.handleRequest(job.data).then((result) => {
+        done(null, result)
+      }).catch((error) => {
+        done(error);
+      })
+    })
   }
 
   dispatchJob(job: IJob): Promise<any> {
     const state = job.getJobRequestState();
-    const kueJob = this._queue.createJob(IJob.getJobKey(), job.getJobRequestState())
+    const kueJob = this._queue.createJob(job.getJobKey(), job.getJobRequestState()).save();
     return new Promise<any>((resolve, reject) => {
       kueJob.once('complete', (result: any) => {
         resolve(result)

@@ -18,7 +18,6 @@ export class MusicBrainzResolver implements IMetadataResolverStrategy {
         if (err) {
           return reject(err)
         } else {
-          console.log(results)
           if (results.length === 0) {
             return resolve(SongMetadata.emptyMetadata())
           }
