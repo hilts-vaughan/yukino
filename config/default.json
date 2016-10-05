@@ -1,5 +1,13 @@
 {
     "youtube": {
       "key": ""
+    },
+    "kue": {
+      "port": 3000
+    },
+    "resolvers": {
+      "musicbrainz": {
+        "key": "OnbwdvdM7AA"
+      }
     }
 }

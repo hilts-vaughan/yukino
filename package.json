@@ -7,7 +7,7 @@
   "scripts": {
     "clean": "rm -rf build node_modules",
     "start": "tsc && node ./build/app.js",
-    "watch": "tsc && DEBUG=nodetyped:* concurrently -kr 'tsc --watch' 'nodemon --delay 2000ms'",
+    "watch": "tsc && DEBUG=* concurrently -kr 'tsc --watch' 'nodemon --delay 2000ms'",
     "test": "tsc && concurrently -kr 'tsc --watch' 'nodemon --delay 2000ms node_modules/.bin/jasmine JASMINE_CONFIG_PATH=./jasmine.json'",
     "doc": "tsc && node_modules/.bin/jsdoc --private --configure ./jsdocConfig.json"
   },
@@ -25,18 +25,25 @@
   "main": "build/app.js",
   "dependencies": {
     "@types/config": "0.0.30",
+    "@types/kue": "^0.9.30",
     "@types/lodash": "^4.14.36",
     "@types/node": "^6.0.41",
+    "@types/node-uuid": "0.0.28",
     "@types/restify": "^2.0.32",
+    "acoustid": "^1.2.1",
     "body-parser": "^1.15.2",
     "config": "^1.21.0",
     "cookie-parser": "^1.4.3",
     "debug": "^2.2.0",
     "express": "^4.14.0",
+    "id3-writer": "^1.2.2",
     "jquery": "^3.1.0",
+    "kue": "^0.11.1",
     "lodash": "^4.16.1",
+    "node-uuid": "^1.4.7",
     "restify": "^4.1.1",
     "typescript": "^2.0.2",
+    "youtube-dl": "^1.11.1",
     "youtube-search": "^1.0.6"
   },
   "devDependencies": {

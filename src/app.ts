@@ -1,3 +1,4 @@
+import {ComputeWorker} from "./compute/ComputeWorker";
 /**
  * yukino - Yukino is a music search crawler that is capable of downloading, identifying (with Gracenote) and serving up music from various web services.
  * It excels at making music accessible to all, using just Youtube and SndCloud
@@ -7,6 +8,11 @@ import { IAPIController } from "./IAPIController";
 import * as path from 'path';
 import * as fs from 'fs';
 import * as restify from 'restify';
+import * as cluster from 'cluster'
+import * as kue from 'kue'
+import * as config from 'config'
+import * as os from 'os'
+
 
 // This is required
 restify.CORS.ALLOW_HEADERS.push('auth');
@@ -31,6 +37,12 @@ class Application {
     this.server.listen(2740, () => {
       console.log('API Server is now listening on port %d', 2740);
     })
+
+    console.log('kue - bootstraping & now accepting workers...');
+
+    // Accept Kue workers where possible
+    const port: number = config.get<number>('kue.port')
+    kue.app.listen(port)
   }
 
   _registerMiddleware() {
@@ -64,4 +76,29 @@ class Application {
 
 }
 
-var main = new Application()
+var computeQueue = kue.createQueue();
+
+computeQueue.on('error', (error) => {
+  console.log(error);
+})
+
+// Begin the master server if it's master
+if (cluster.isMaster) {
+  var main = new Application()
+
+  // We'll spin up a compute node for each core
+  // since the API is fairly light and can handle under load.
+  // In most circumstances, compute nodes would be seperate, though
+  for (let i = 0; i < os.cpus().length; i++) {
+    cluster.fork();
+  }
+
+  const job = computeQueue.create('download', { url: 'https://www.youtube.com/watch?v=RITep593A2U' }).save()
+  job.once('complete', (result: any) => {
+    console.log(JSON.stringify(result))
+  })
+
+} else {
+  const worker = new ComputeWorker(1, 1, computeQueue);
+  worker.listen();
+}
