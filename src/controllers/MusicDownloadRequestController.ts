@@ -7,6 +7,8 @@ import {JobDispatchService} from "../services/JobDispatchService";
 import {IAPIController} from "../IAPIController";
 import * as restify from 'restify'
 import * as _ from 'lodash'
+import * as fs from 'fs'
+const nodeID3 = require('node-id3');
 
 export class MusicDownloadRequestController implements IAPIController {
   private _jobService: JobDispatchService;
@@ -29,10 +31,16 @@ export class MusicDownloadRequestController implements IAPIController {
       }
 
       const downloadRepo = new DownloadRepository();
+      const repo = new DownloadSubscriptionRepository();
+
       const value = downloadRepo.getDownloadForUrl(body.url)
       if (value != null) {
         // Don't bother sending the dispatch job, when the user hits
         // their async queue it will show up there
+
+        // Add it though, so they do actually /see/ it
+        repo.addUrlForToken(body.token, body.url)
+
         return response.send(200, {});
       }
 
@@ -48,7 +56,6 @@ export class MusicDownloadRequestController implements IAPIController {
 
       // Send the job to the users queue for them to view on the page
       // when they need access to it
-      const repo = new DownloadSubscriptionRepository();
       repo.addUrlForToken(body.token, body.url)
 
       // Send a response to let the user know everything went OK
@@ -62,7 +69,7 @@ export class MusicDownloadRequestController implements IAPIController {
       const repo = new DownloadSubscriptionRepository();
       const downloadRepo = new DownloadRepository();
 
-      const urls = repo.getSubscribedUrlsForToken(body.token)
+      const urls = repo.getSubscribedUrlsForToken(body.token);
       const requests = urls.map((url) => {
         const download = downloadRepo.getDownloadForUrl(url)
         if (download) {
@@ -71,13 +78,35 @@ export class MusicDownloadRequestController implements IAPIController {
           return null;
         }
       }).filter((value) => value !== null).map((download) => {
-        delete download['_pathOnDisk']
         return download;
       })
 
       // Send the requests as is...
       response.send(200, requests);
     })
+
+    server.get('/download/:id', (request: restify.Request, response: restify.Response, next: restify.Next) => {
+      var id = request.params.id;
+      const downloadRepo = new DownloadRepository();
+      const r = downloadRepo.getDownloadById(id);
+
+      if (r) {
+        response.contentType = "audio/mpeg";
+
+        // Set the filename
+        const tags = nodeID3.read(r.path)
+        const filename = `${tags.artist} - ${tags.title}`;
+        response.setHeader('Content-disposition', 'attachment; filename="' + filename + '"');
+
+        fs.readFile(r.path, (err, data) => {
+          response.send(200, data)
+        })
+      } else {
+        response.send(400);
+      }
+
+    });
+
   }
 
   private _persistJob(job: SongFetchJob, jobResult: SongRequest) {

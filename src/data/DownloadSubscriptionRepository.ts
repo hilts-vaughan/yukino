@@ -2,7 +2,12 @@ export class DownloadSubscriptionRepository {
   private static _cache: Object = {};
 
   getSubscribedUrlsForToken(token: string): Array<string> {
-    const urls = DownloadSubscriptionRepository._cache[token];
+    let urls = DownloadSubscriptionRepository._cache[token];
+
+    if (!urls) {
+      urls = [];
+    }
+
     return urls;
   }
 

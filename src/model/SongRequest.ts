@@ -4,6 +4,9 @@ export class SongRequest {
   private _originalUrl: string;
   private _meta: SongMetadata;
 
+  private static _idCounter: number = 4985;
+  private _id: number = SongRequest._idCounter++;
+
   constructor(originalUrl: string, pathOnDisk: string, discoveredMetaData: SongMetadata) {
     this._pathOnDisk = pathOnDisk;
     this._originalUrl = originalUrl;
@@ -20,6 +23,10 @@ export class SongRequest {
 
   getUrl(): string {
     return this._originalUrl;
+  }
+
+  get id(): number {
+    return this._id;
   }
 
 }

@@ -33,6 +33,7 @@ export class SongFetchJobHandler {
           resourcePath = download.streamForFile;
           this._metadataWriter.writeMetadataToFile(download.streamForFile, metadata).then((value) => {
             const request = new SongRequest(url, download.streamForFile, metadata);
+            console.log("File has been successfully downloaded and stored @ %s", download.streamForFile)
             resolve(request);
           })
         })

@@ -12,7 +12,7 @@ export class YoutubeSearchProvider implements ISongSearchProvider {
     };
   }
   search(query: string, resultCount = 10): Promise<Array<SongSearchResult>> {
-    var options: any = _.extend({ maxResults: resultCount }, this._options)
+    var options: any = _.extend({ maxResults: resultCount, type: 'video' }, this._options)
     var result = new Promise((resolve, reject) => {
       search(query, options, (err, results) => {
         if (err) {

@@ -1,35 +1,29 @@
 import {SongMetadata} from "../model/SongMetadata";
-const id3 = require('id3-writer');
+const nodeID3 = require('node-id3');
+
 
 export class MetadataWriter {
-  private readonly _writer : any;
-
-  constructor() {
-    this._writer = new id3.Writer();
-  }
-
   writeMetadataToFile(file: string, metadata: SongMetadata): Promise<SongMetadata> {
     return new Promise<SongMetadata>((resolve, reject) => {
-      return resolve(metadata);
-
-
       // TODO: Find a way to make this resolver work
-      // 
-      // let fileHandler = new id3.File(file);
-      // var meta = new id3.Meta({
-      //   artist: metadata.artist,
-      //   title: metadata.title,
-      //   album: metadata.album
-      // });
-      //
-      // this._writer.setFile(fileHandler).write(meta, (err) => {
-      //   console.log(err)
-      //   if (err) {
-      //     throw err;
-      //   } else {
-      //     resolve(metadata);
-      //   }
-      // });
+
+      var meta = {
+        artist: metadata.artist,
+        title: metadata.title,
+        album: metadata.album,
+        encodedBy: 'yukino'
+      };
+
+      console.log(meta)
+      var success = nodeID3.write(meta, file)
+      console.log(success)
+
+      if (!success) {
+        throw new Error('Failed to fetch write meta!');
+      } else {
+        resolve(metadata)
+      }
+
     })
   }
 }

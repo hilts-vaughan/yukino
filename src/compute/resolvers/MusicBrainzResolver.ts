@@ -23,12 +23,20 @@ export class MusicBrainzResolver implements IMetadataResolverStrategy {
           }
 
           // Extract the meta data here and then return it into the SongMetadata
-          const artist = results[0].recordings[0].artists[0].name;
-          const album = results[0].recordings[0].releasegroups[0].title;
-          const name = results[0].recordings[0].title;
-          const score = results[0].score;
 
-          return resolve(new SongMetadata(name, artist, album, score));
+          try {
+
+            const artist = results[0].recordings[0].artists[0].name;
+            const album = results[0].recordings[0].releasegroups[0].title;
+            const name = results[0].recordings[0].title;
+            const score = results[0].score;
+
+            return resolve(new SongMetadata(name, artist, album, score));
+          }
+          catch (exception) {
+            reject('Failed to identity the song properly!');
+          }
+
         }
       });
     })

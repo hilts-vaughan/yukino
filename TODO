@@ -21,3 +21,9 @@
   testing, though... we'll just have to rate limit them...
 
   That means an album would take a few seconds.
+
+
+Need a proper logging solution as well... instead of this console.log
+non-sense...
+
+Also, learn how to debug properly...
